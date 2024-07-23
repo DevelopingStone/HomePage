@@ -25,12 +25,19 @@ public class MemberService {
   @Transactional
   public DeleteMemberResponse deleteMember(long deleteMemberRequest) {
     MemberEntity memberById = findMemberById(deleteMemberRequest);
+    if (!isNotDeleted(memberById)) {
+      throw new IllegalStateException("이미 삭제된 회원 입니다.");
+    }
     memberById.markAsDeleted();
     return memberRepository.save(memberById).toDeleteMemberResponse();
   }
 
   private MemberEntity findMemberById(long id) {
-    return memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Member not found with id " + id));
+    return memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + " : 번 회원 아이디를 찾을수 없습니다."));
+  }
+
+  private boolean isNotDeleted(MemberEntity memberById) {
+    return memberById.getDeletedDttm() == null;
   }
 
 }

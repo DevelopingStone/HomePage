@@ -14,8 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@Setter
-@Getter
 public abstract class BaseEntity {
 
   @Column(nullable = false, updatable = false)
@@ -25,6 +23,8 @@ public abstract class BaseEntity {
   @LastModifiedDate
   private LocalDateTime updateDttm;
 
+  @Setter
+  @Getter
   private LocalDateTime deletedDttm;
 
 }
